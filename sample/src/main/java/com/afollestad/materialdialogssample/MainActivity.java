@@ -165,8 +165,8 @@ public class MainActivity extends ActionBarActivity implements FolderSelectorDia
     private void showBasicNoTitle() {
         new MaterialDialog.Builder(this)
                 .content(R.string.shareLocationPrompt)
-                .positiveText(R.string.agree)
-                .negativeText(R.string.disagree)
+                .positiveText("تایید")
+                .negativeText("انصراف")
                 .show();
     }
 

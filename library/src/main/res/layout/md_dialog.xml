@@ -1,68 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ir.iranapps.rtlizer.RtlLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                     xmlns:tools="http://schemas.android.com/tools"
+                                     android:layout_width="match_parent"
+                                     android:layout_height="match_parent"
+                                     android:orientation="vertical">
 
-    <LinearLayout
+    <ir.iranapps.rtlizer.RtlLinearLayout
         android:id="@+id/mainFrame"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/md_dialog_frame_margin"
         android:layout_marginBottom="@dimen/md_main_frame_margin"
         android:layout_marginLeft="@dimen/md_dialog_frame_margin"
         android:layout_marginRight="@dimen/md_dialog_frame_margin"
-        android:layout_weight="1">
+        android:layout_marginTop="@dimen/md_dialog_frame_margin"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/titleFrame"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/md_main_frame_margin"
             android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/md_main_frame_margin">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:layout_marginRight="@dimen/md_icon_margin" />
+                android:layout_marginRight="@dimen/md_icon_margin"
+                android:scaleType="fitXY"/>
 
-            <TextView
+            <ir.iranapps.rtlizer.RtlTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="start"
                 android:textSize="@dimen/md_title_textsize"
-                tools:text="Title" />
+                tools:text="Title"/>
 
         </LinearLayout>
 
         <com.afollestad.materialdialogs.views.MeasureCallbackScrollView
             android:id="@+id/contentScrollView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:clipToPadding="false">
 
-            <TextView
+            <ir.iranapps.rtlizer.RtlTextView
                 android:id="@+id/content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/md_content_textsize"
-                tools:text="Content" />
+                tools:text="Content"/>
 
         </com.afollestad.materialdialogs.views.MeasureCallbackScrollView>
 
-    </LinearLayout>
+    </ir.iranapps.rtlizer.RtlLinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/customViewScrollParent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <com.afollestad.materialdialogs.views.MeasureCallbackScrollView
@@ -73,35 +76,35 @@
 
             <LinearLayout
                 android:id="@+id/customViewFrame"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/md_dialog_frame_margin"
-                android:paddingBottom="@dimen/md_dialog_frame_margin"
                 android:layout_marginLeft="@dimen/md_dialog_frame_margin"
-                android:layout_marginRight="@dimen/md_dialog_frame_margin">
+                android:layout_marginRight="@dimen/md_dialog_frame_margin"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/md_dialog_frame_margin"
+                android:paddingTop="@dimen/md_dialog_frame_margin">
 
                 <LinearLayout
                     android:id="@+id/titleFrameCustomView"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/md_main_frame_margin"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="@dimen/md_main_frame_margin">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/iconCustomView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
-                        android:layout_marginRight="@dimen/md_icon_margin" />
+                        android:layout_marginRight="@dimen/md_icon_margin"
+                        android:scaleType="fitXY"/>
 
                     <TextView
                         android:id="@+id/titleCustomView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/md_title_textsize"
-                        tools:text="Title" />
+                        tools:text="Title"/>
 
                 </LinearLayout>
 
@@ -120,11 +123,11 @@
                 android:id="@+id/contentListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/md_main_frame_margin"
-                android:scrollbarStyle="outsideOverlay"
                 android:clipToPadding="false"
                 android:divider="@null"
-                android:dividerHeight="0dp" />
+                android:dividerHeight="0dp"
+                android:paddingBottom="@dimen/md_main_frame_margin"
+                android:scrollbarStyle="outsideOverlay"/>
 
         </LinearLayout>
 
@@ -134,52 +137,57 @@
         android:id="@+id/customViewDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
-    <RelativeLayout
+    <ir.iranapps.rtlizer.RtlRelativeLayout
         android:id="@+id/buttonDefaultFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/md_button_padding_frame_side"
-        android:layout_marginBottom="@dimen/md_button_padding_frame_bottom">
+        android:layout_marginBottom="@dimen/md_button_padding_frame_bottom"
+        app:marginEnd="@dimen/md_button_padding_frame_side">
 
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonDefaultNeutral"
             style="@style/MD_ActionButton"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/md_neutral_button_margin" />
+            app:alignParentStart="true"
+            app:marginStart="@dimen/md_neutral_button_margin"/>
 
         <!-- toLeftOf rule added from invalidateActions() -->
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonDefaultNegative"
-            style="@style/MD_ActionButton" />
+            style="@style/MD_ActionButton"/>
 
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonDefaultPositive"
             style="@style/MD_ActionButton"
-            android:layout_alignParentRight="true" />
+            app:alignParentEnd="true"/>
 
-    </RelativeLayout>
+        <!-- without it buttons don't align correctly -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:alignParentStart="true"/>
+    </ir.iranapps.rtlizer.RtlRelativeLayout>
 
     <LinearLayout
         android:id="@+id/buttonStackedFrame"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/md_button_padding_frame_bottom">
+        android:layout_marginBottom="@dimen/md_button_padding_frame_bottom"
+        android:orientation="vertical">
 
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonStackedPositive"
-            style="@style/MD_ActionButtonStacked" />
+            style="@style/MD_ActionButtonStacked"/>
 
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonStackedNegative"
-            style="@style/MD_ActionButtonStacked" />
+            style="@style/MD_ActionButtonStacked"/>
 
-        <Button
+        <ir.iranapps.rtlizer.RtlButton
             android:id="@+id/buttonStackedNeutral"
-            style="@style/MD_ActionButtonStacked" />
+            style="@style/MD_ActionButtonStacked"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</ir.iranapps.rtlizer.RtlLinearLayout>

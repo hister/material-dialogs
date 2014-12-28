@@ -6,10 +6,10 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 21
         versionCode 1
-        versionName "0.4.7"
+        versionName "0.4.7.3"
     }
     lintOptions {
         abortOnError false
@@ -18,8 +18,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.+'
-    compile 'com.android.support:support-annotations:21.+'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:support-annotations:21.0.3'
+    compile 'ir.iranapps:rtlizer:1.0.4'
+    compile 'ir.iranapps:dimens:1.0.0'
 }
 
 publish {

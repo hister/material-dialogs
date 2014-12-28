@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ir.iranapps.rtlizer.Rtlizer;
+
 /**
  * @author Aidan Follestad (afollestad)
  */
@@ -532,9 +534,15 @@ public class MaterialDialog extends DialogBase implements View.OnClickListener, 
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         (int) getContext().getResources().getDimension(R.dimen.md_button_height));
                 if (this.positiveText != null) {
-                    params.addRule(RelativeLayout.LEFT_OF, R.id.buttonDefaultPositive);
+                    if (Rtlizer.isRtl())
+                        params.addRule(RelativeLayout.RIGHT_OF, R.id.buttonDefaultPositive);
+                    else
+                        params.addRule(RelativeLayout.LEFT_OF, R.id.buttonDefaultPositive);
                 } else {
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    if (Rtlizer.isRtl())
+                        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    else
+                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 }
                 negativeButton.setLayoutParams(params);
             }
