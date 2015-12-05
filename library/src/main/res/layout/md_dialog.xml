@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textSize="@dimen/md_title_textsize"
+                app:fontType="bold"
                 tools:text="Title"/>
 
         </LinearLayout>
@@ -99,11 +100,12 @@
                         android:layout_marginRight="@dimen/md_icon_margin"
                         android:scaleType="fitXY"/>
 
-                    <TextView
+                    <ir.iranapps.rtlizer.RtlTextView
                         android:id="@+id/titleCustomView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/md_title_textsize"
+                        app:fontType="bold"
                         tools:text="Title"/>
 
                 </LinearLayout>

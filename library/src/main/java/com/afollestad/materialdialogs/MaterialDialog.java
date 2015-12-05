@@ -1097,6 +1097,14 @@ public class MaterialDialog extends DialogBase implements View.OnClickListener, 
         setActionButton(which, getContext().getString(titleRes));
     }
 
+    public final void setActionButton(String positiveText, String negativeText, String neutralText) {
+        this.positiveText = positiveText;
+        this.negativeText = negativeText;
+        this.neutralText = neutralText;
+
+        invalidateActions();
+    }
+
     /**
      * Gets whether or not the positive, neutral, or negative action button is visible.
      *
@@ -1197,6 +1205,10 @@ public class MaterialDialog extends DialogBase implements View.OnClickListener, 
         } else {
             return null;
         }
+    }
+
+    public View getView() {
+        return view;
     }
 
     private class MaterialDialogAdapter extends ArrayAdapter<CharSequence> {
