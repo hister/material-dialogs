@@ -13,7 +13,6 @@
     <string name="list">Basic List</string>
     <string name="singleChoice">Single Choice</string>
     <string name="multiChoice">Multi Choice</string>
-    <string name="complex">Complex Listeners</string>
     <string name="customView">Custom View</string>
     <string name="themed">Themed</string>
     <string name="signalStrength">Signal strength</string>
@@ -43,7 +42,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="basic_notitle">Basic (No Title)</string>
     <string name="shareLocationPrompt">This app wants to access your location.</string>
-    <string name="basic_list_long">Basic Long List</string>
+    <string name="basic_list_long">Basic List (Long)</string>
     <string name="states">States</string>
     <string name="custom_listitem_button">A button!</string>
     <string name="custom_adapter">Custom Adapter</string>
@@ -53,12 +52,25 @@
     <string name="basic_list_notitle">Basic List (No Title)</string>
     <string name="folder_chooser">Folder Chooser</string>
     <string name="showCancelDismissCallbacks">Show/Cancel/Dismiss Callbacks</string>
+    <string name="changelog">Changelog</string>
+    <string name="customView_webView">Custom View No Scroll #1</string>
+    <string name="color_chooser_primary">Color Chooser (Primary)</string>
+    <string name="color_chooser_accent">Color Chooser (Accent)</string>
+    <string name="ssid">SSID</string>
+    <string name="ssidLit">Material Dialogs</string>
 
     <string-array name="socialNetworks">
         <item>Twitter</item>
         <item>Google+</item>
         <item>Instagram</item>
         <item>Facebook</item>
+    </string-array>
+
+    <string-array name="socialNetworks_longItems">
+        <item>Twitter is an online social networking service that enables users to send and read short 140-character messages called "tweets".</item>
+        <item>Google+ is an interest-based social network that is owned and operated by Google Inc. The service is Google\'s fourth foray into social networking.</item>
+        <item>Instagram is an online mobile photo-sharing, video-sharing and social networking service that enables its users to take pictures and videos, and share them on a variety of social networking platforms.</item>
+        <item>Facebook is an online social networking service headquartered in Menlo Park, California. Its website was launched on February 4, 2004, by Mark Zuckerberg with friends.</item>
     </string-array>
 
     <string-array name="states">
@@ -119,5 +131,59 @@
         <item>Wisconsin</item>
         <item>Wyoming</item>
     </string-array>
+
+    <string name="preference_dialogs">Preference Dialogs</string>
+    <string name="list_pref_title">List Preference</string>
+    <string name="list_pref_desc">This is an example of a list preference that automatically uses Material Dialogs to show the list dialog.</string>
+    <string name="multilist_pref_title">Multi Select List Preference</string>
+    <string name="multilist_pref_desc">This is an example of a multi select list preference that automatically uses Material Dialogs to show the list dialog.</string>
+    <string name="edittext_pref_title">EditText Preference</string>
+    <string name="edittext_pref_desc">This is an example of an EditText preference that automatically uses Material Dialogs to show the input dialog.</string>
+    <string name="edittext_pref_dialogtitle">Enter a Name</string>
+    <string name="edittext_pref_optionalvalue">Default value</string>
+    <string name="progress_dialog_indeterminate">Progress Dialog (Indeterminate)</string>
+    <string name="progress_dialog_indeterminate_horizontal">Progress Dialog (Horizontal Indeterminate)</string>
+    <string name="progress_dialog">Progress Dialog</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="optional_dialog_message">This is an optional dialog message.</string>
+    <string name="multiChoiceLimited">Multi Choice (Limit Selections)</string>
+    <string name="selection_limit_reached">Selection limit reached!</string>
+
+    <!--  Strings for possible PreferenceActivity Back/Next buttons -->
+    <string name="back_button_label">Back</string>
+    <string name="next_button_label">Next</string>
+
+    <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
+    <string name="skip_button_label">Skip</string>
+    <string name="input">Input</string>
+    <string name="input_custominvalidation">Input (Custom Invalidation)</string>
+    <string name="input_hint">John Appleseed</string>
+    <string name="input_content">What\'s your name?</string>
+    <string name="simple_list">Simple Dialog (Guidelines Spec)</string>
+    <string name="set_backup">Set backup account</string>
+    <string name="add_account">Add account</string>
+    <string name="submit">Submit</string>
+    <string name="preference_dialog_message">This is an example of a dialog message.</string>
+    <string name="preference_dialog_title">Dialog Title</string>
+    <string name="material_dialog_pref_title">Dialog Preference</string>
+    <string name="material_dialog_pref_summary">This is an example of a basic dialog preference that automatically uses Material Dialogs to show the dialog.</string>
+    <string name="input_content_custominvalidation">Do not type hello, or else!</string>
+    <string name="clear_selection">Clear</string>
+    <string name="color_palette">Color Palette</string>
+    <string name="colors">Colors</string>
+    <string name="color_chooser_customColors">Color Chooser (Custom Palette)</string>
+    <string name="color_chooser_customColors_noSub">Color Chooser (Custom Palette, No Sub)</string>
+    <string name="action_buttons">Action Buttons</string>
+    <string name="custom_views">Custom Views</string>
+    <string name="color_chooser">Color Choosers</string>
+    <string name="progress">Progress</string>
+    <string name="preferences">Preferences</string>
+    <string name="misc">Miscellaneous</string>
+    <string name="basic_lists">Basic Lists</string>
+    <string name="choice_lists">Choice Lists</string>
+    <string name="advanced_lists">Advanced Lists</string>
+    <string name="list_longItems">Basic List (Long Items)</string>
+    <string name="singleChoice_longItems">Single Choice (Long Items)</string>
+    <string name="multiChoice_longItems">Multi Choice (Long Items)</string>
 
 </resources>
