@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.v7.text.AllCapsTransformationMethod;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.R;
@@ -45,6 +44,7 @@ public class MDButton extends RtlTextView {
 
     @Override
     public void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super.init(context, attrs, defStyleAttr, defStyleRes);
         mStackedEndPadding = context.getResources()
                 .getDimensionPixelSize(R.dimen.md_dialog_frame_margin);
         mStackedGravity = GravityEnum.END;
