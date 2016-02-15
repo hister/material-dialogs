@@ -1,5 +1,9 @@
 # Material Dialogs
 
+[![Release](https://jitpack.io/v/afollestad/material-dialogs.svg)](https://jitpack.io/#afollestad/material-dialogs)
+[![Build Status](https://travis-ci.org/afollestad/material-dialogs.svg)](https://travis-ci.org/afollestad/material-dialogs)
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/afollestad/material-dialogs/blob/master/LICENSE.txt)
+
 ![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/mddemoshowcase.png)
 
 # Table of Contents (Core)
@@ -55,9 +59,10 @@
 1. [Color Chooser Dialogs](https://github.com/afollestad/material-dialogs#color-chooser-dialogs)
     1. [Finding Visible Dialogs](https://github.com/afollestad/material-dialogs#finding-visible-dialogs)
     2. [User Color Input](https://github.com/afollestad/material-dialogs#user-color-input)
-2. [Folder Selector Dialogs](https://github.com/afollestad/material-dialogs#folder-selector-dialogs)
-3. [Preference Dialogs](https://github.com/afollestad/material-dialogs#preference-dialogs)
-4. [Simple List Dialogs](https://github.com/afollestad/material-dialogs#simple-list-dialogs) 
+2. [File Selector Dialogs](https://github.com/afollestad/material-dialogs#file-selector-dialogs)
+3. [Folder Selector Dialogs](https://github.com/afollestad/material-dialogs#folder-selector-dialogs)
+4. [Preference Dialogs](https://github.com/afollestad/material-dialogs#preference-dialogs)
+5. [Simple List Dialogs](https://github.com/afollestad/material-dialogs#simple-list-dialogs) 
 
 ------
 
@@ -67,9 +72,9 @@ You can download the latest sample APK from this repo here: https://github.com/a
 
 It's also on Google Play:
 
-<a href="https://play.google.com/store/apps/details?id=com.afollestad.materialdialogssample">
+<a href="https://play.google.com/store/apps/details?id=com.afollestad.materialdialogssample" target="_blank">
   <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+       src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
 </a>
 
 Having the sample project installed is a good way to be notified of new releases. Although Watching this 
@@ -78,8 +83,6 @@ repository will allow GitHub to email you whenever I publish a release.
 ---
 
 # Gradle Dependency
-
-[![Release](https://img.shields.io/github/release/afollestad/material-dialogs.svg?label=jitpack)](https://jitpack.io/#afollestad/material-dialogs)
 
 ### Repository
 
@@ -102,7 +105,7 @@ You can create basic, list, single/multi choice, progress, input, etc. dialogs w
 ```gradle
 dependencies {
 	...
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.4@aar') {
         transitive = true
     }
 }
@@ -118,7 +121,7 @@ dependencies {
 
     // ... other dependencies here
     
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.2@aar') {
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
         transitive = true
     }
 }
@@ -856,7 +859,7 @@ you show from an Activity which has a theme containing any of these attributes:
         The name of font in assets/fonts used everywhere else, like content and list items
         (null uses device default). E.g. [your-project]/app/main/assets/fonts/[regular]
     -->
-    <item name="md_regular_font">Roboto-Medium.ttf</item>
+    <item name="md_regular_font">Roboto-Regular.ttf</item>
 
 </style>
 ```
@@ -1199,6 +1202,42 @@ with user input that's received through typing or selection. Material Dialogs in
 `MaterialListPreference`, and `MaterialMultiSelectListPreference` classes that can be used in your preferences XML to automatically use Material-themed
 dialogs. See the sample project for details.
 
+By default, all of these preference classes will set their layout to `R.layout.md_preference_custom`. If you 
+don't want a default layout to be set, you can provide an attribute on the preferences in your XML:
+
+```
+app:useStockLayout="true"
+```
+
+---
+
+# File Selector Dialogs
+
+The Builder is used like this:
+
+```java
+// Pass AppCompatActivity which implements FileCallback
+new FileChooserDialog.Builder(this)
+    .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+    .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
+    .mimeType("image/*") // Optional MIME type filter
+    .show();
+```
+
+The Activity you show the dialog in must implement `FileCallback`:
+
+```java
+public class MyActivity implements FileChooserDialog.FileCallback {
+
+    // ...
+
+    @Override
+    public void onFileSelection(@NonNull File file) {
+        // TODO
+    }
+}
+```
+
 ---
 
 # Folder Selector Dialogs
@@ -1221,7 +1260,7 @@ public class MyActivity implements FolderChooserDialog.FolderCallback {
     // ...
 
     @Override
-    public void onFolderSelection(File folder) {
+    public void onFolderSelection(@NonNull File folder) {
         // TODO
     }
 }

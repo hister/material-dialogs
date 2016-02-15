@@ -4,7 +4,7 @@ apply plugin: 'maven'
 
 group='com.afollestad'
 
-def libVersion = '0.8.5.2.1'
+def libVersion = '0.8.5.4.1'
 
 android {
     compileSdkVersion 23
@@ -14,7 +14,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 1
-        versionName "0.8.5.2"
+        versionName "0.8.5.4"
         consumerProguardFiles 'progress-proguard.txt'
     }
     lintOptions {

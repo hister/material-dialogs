@@ -52,6 +52,7 @@ import com.afollestad.materialdialogs.util.TypefaceHelper;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -332,8 +333,10 @@ public class MaterialDialog extends DialogBase implements
                 }
                 if (mBuilder.onPositiveCallback != null)
                     mBuilder.onPositiveCallback.onClick(this, tag);
-                sendSingleChoiceCallback(v);
-                sendMultichoiceCallback();
+                if (!mBuilder.alwaysCallSingleChoiceCallback)
+                    sendSingleChoiceCallback(v);
+                if (!mBuilder.alwaysCallMultiChoiceCallback)
+                    sendMultichoiceCallback();
                 if (mBuilder.inputCallback != null && input != null && !mBuilder.alwaysCallInputCallback)
                     mBuilder.inputCallback.onInput(this, input.getText());
                 if (mBuilder.autoDismiss) dismiss();
@@ -403,6 +406,7 @@ public class MaterialDialog extends DialogBase implements
         protected boolean alwaysCallSingleChoiceCallback = false;
         protected Theme theme = Theme.LIGHT;
         protected boolean cancelable = true;
+        protected boolean canceledOnTouchOutside = true;
         protected float contentLineSpacingMultiplier = 1.2f;
         protected int selectedIndex = -1;
         protected Integer[] selectedIndices = null;
@@ -710,6 +714,19 @@ public class MaterialDialog extends DialogBase implements
 
         public Builder contentLineSpacing(float multiplier) {
             this.contentLineSpacingMultiplier = multiplier;
+            return this;
+        }
+
+        public Builder items(@NonNull Collection collection) {
+            if (collection.size() > 0) {
+                final String[] array = new String[collection.size()];
+                int i = 0;
+                for (Object obj : collection) {
+                    array[i] = obj.toString();
+                    i++;
+                }
+                items(array);
+            }
             return this;
         }
 
@@ -1145,6 +1162,12 @@ public class MaterialDialog extends DialogBase implements
 
         public Builder cancelable(boolean cancelable) {
             this.cancelable = cancelable;
+            this.canceledOnTouchOutside = cancelable;
+            return this;
+        }
+
+        public Builder canceledOnTouchOutside(boolean canceledOnTouchOutside) {
+            this.canceledOnTouchOutside = canceledOnTouchOutside;
             return this;
         }
 
