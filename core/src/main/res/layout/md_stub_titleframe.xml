@@ -1,9 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ir.tgbs.rtlizer.RtlLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/titleFrame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:gravity="start|center_vertical"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/md_title_frame_margin_bottom"
     android:paddingLeft="@dimen/md_dialog_frame_margin"
@@ -21,10 +23,12 @@
 
     <ir.tgbs.rtlizer.RtlTextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:gravity="start"
+        app:fontType="boldUi"
         android:textSize="@dimen/md_title_textsize"
         tools:text="Title" />
 
-</LinearLayout>
+</ir.tgbs.rtlizer.RtlLinearLayout>
