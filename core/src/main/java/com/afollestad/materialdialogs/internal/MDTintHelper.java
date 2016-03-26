@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatEditText;
@@ -38,9 +39,17 @@ public class MDTintHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             radioButton.setButtonTintList(sl);
         } else {
-            Drawable d = DrawableCompat.wrap(ContextCompat.getDrawable(radioButton.getContext(), R.drawable.abc_btn_radio_material));
-            DrawableCompat.setTintList(d, sl);
-            radioButton.setButtonDrawable(d);
+            Drawable radioDrawable = VectorDrawableCompat.create(radioButton.getContext().getResources(),
+                    R.drawable.abc_btn_radio_material, null);
+            if (radioDrawable == null) {
+                // https://github.com/afollestad/material-dialogs/issues/1006
+                // Trying to load this resource as normal drawable
+                radioDrawable = ContextCompat.getDrawable(radioButton.getContext(),
+                        R.drawable.abc_btn_radio_material);
+            }
+            Drawable drawable = DrawableCompat.wrap(radioDrawable);
+            DrawableCompat.setTintList(drawable, sl);
+            radioButton.setButtonDrawable(drawable);
         }
     }
 
@@ -129,7 +138,15 @@ public class MDTintHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             box.setButtonTintList(sl);
         } else {
-            Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(box.getContext(), R.drawable.abc_btn_check_material));
+            Drawable checkDrawable = VectorDrawableCompat.create(box.getContext().getResources(),
+                    R.drawable.abc_btn_check_material, null);
+            if (checkDrawable == null) {
+                // https://github.com/afollestad/material-dialogs/issues/1006
+                // Trying to load this resource as normal drawable
+                checkDrawable = ContextCompat.getDrawable(box.getContext(),
+                        R.drawable.abc_btn_check_material);
+            }
+            Drawable drawable = DrawableCompat.wrap(checkDrawable);
             DrawableCompat.setTintList(drawable, sl);
             box.setButtonDrawable(drawable);
         }
@@ -147,8 +164,8 @@ public class MDTintHelper {
             Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
             fCursorDrawable.setAccessible(true);
             Drawable[] drawables = new Drawable[2];
-            drawables[0] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
-            drawables[1] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
+            drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+            drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
             drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             fCursorDrawable.set(editor, drawables);

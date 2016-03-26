@@ -104,8 +104,10 @@ You can create basic, list, single/multi choice, progress, input, etc. dialogs w
 
 ```gradle
 dependencies {
-	...
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.4@aar') {
+
+	// ... other dependencies here
+
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
         transitive = true
     }
 }
@@ -121,7 +123,7 @@ dependencies {
 
     // ... other dependencies here
     
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.7@aar') {
         transitive = true
     }
 }
@@ -1221,6 +1223,7 @@ new FileChooserDialog.Builder(this)
     .chooseButton(R.string.md_choose_label)  // changes label of the choose button
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .mimeType("image/*") // Optional MIME type filter
+    .tag("optional-identifier")
     .show();
 ```
 
@@ -1232,8 +1235,9 @@ public class MyActivity implements FileChooserDialog.FileCallback {
     // ...
 
     @Override
-    public void onFileSelection(@NonNull File file) {
+    public void onFileSelection(@NonNull FileChooserDialog dialog, @NonNull File file) {
         // TODO
+        final String tag = dialog.getTag(); // gets tag set from Builder, if you use multiple dialogs
     }
 }
 ```
@@ -1249,6 +1253,7 @@ The Builder is used like this:
 new FolderChooserDialog.Builder(this)
     .chooseButton(R.string.md_choose_label)  // changes label of the choose button
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
+    .tag("optional-identifier")
     .show();
 ```
 
@@ -1260,8 +1265,9 @@ public class MyActivity implements FolderChooserDialog.FolderCallback {
     // ...
 
     @Override
-    public void onFolderSelection(@NonNull File folder) {
+    public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
         // TODO
+        final String tag = dialog.getTag(); // gets tag set from Builder, if you use multiple dialogs
     }
 }
 ```

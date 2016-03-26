@@ -13,6 +13,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public class FolderChooserDialog extends DialogFragment implements MaterialDialog.ListCallback {
 
-    private final static String TAG = "[MD_FOLDER_SELECTOR]";
+    private final static String DEFAULT_TAG = "[MD_FOLDER_SELECTOR]";
 
     private File parentFolder;
     private File[] parentContents;
@@ -40,7 +41,7 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     private FolderCallback mCallback;
 
     public interface FolderCallback {
-        void onFolderSelection(@NonNull File folder);
+        void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder);
     }
 
     public FolderChooserDialog() {
@@ -96,7 +97,7 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
-                        mCallback.onFolderSelection(parentFolder);
+                        mCallback.onFolderSelection(FolderChooserDialog.this, parentFolder);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -137,14 +138,15 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
         mCallback = (FolderCallback) activity;
     }
 
-    public void show(AppCompatActivity context) {
-        Fragment frag = context.getSupportFragmentManager().findFragmentByTag(TAG);
+    public void show(FragmentActivity context) {
+        final String tag = getBuilder().mTag;
+        Fragment frag = context.getSupportFragmentManager().findFragmentByTag(tag);
         if (frag != null) {
             ((DialogFragment) frag).dismiss();
             context.getSupportFragmentManager().beginTransaction()
                     .remove(frag).commit();
         }
-        show(context.getSupportFragmentManager(), TAG);
+        show(context.getSupportFragmentManager(), tag);
     }
 
     public static class Builder implements Serializable {
@@ -156,6 +158,7 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
         @StringRes
         protected int mCancelButton;
         protected String mInitialPath;
+        protected String mTag;
 
         public <ActivityType extends AppCompatActivity & FolderCallback> Builder(@NonNull ActivityType context) {
             mContext = context;
@@ -181,6 +184,14 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
             if (initialPath == null)
                 initialPath = File.separator;
             mInitialPath = initialPath;
+            return this;
+        }
+
+        @NonNull
+        public Builder tag(@Nullable String tag) {
+            if (tag == null)
+                tag = DEFAULT_TAG;
+            mTag = tag;
             return this;
         }
 
