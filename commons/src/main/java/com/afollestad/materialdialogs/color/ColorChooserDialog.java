@@ -1,5 +1,6 @@
 package com.afollestad.materialdialogs.color;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.afollestad.materialdialogs.commons.R;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.afollestad.materialdialogs.util.DialogUtils;
@@ -131,7 +133,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
     }
 
     private void topIndex(int value) {
-        if (topIndex() != value && value > -1)
+        if (value > -1)
             findSubIndexForColor(value, mColorsTop[value]);
         getArguments().putInt("top_index", value);
     }
@@ -154,6 +156,13 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         else title = builder.mTitle;
         if (title == 0) title = builder.mTitle;
         return title;
+    }
+
+    public String tag() {
+        Builder builder = getBuilder();
+        if (builder.mTag != null)
+            return builder.mTag;
+        else return super.getTag();
     }
 
     public boolean isAccentMode() {
@@ -314,7 +323,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         mCircleSize = getResources().getDimensionPixelSize(R.dimen.md_colorchooser_circlesize);
         final Builder builder = getBuilder();
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        MaterialDialog.Builder bd = new MaterialDialog.Builder(getActivity())
                 .title(getTitle())
                 .autoDismiss(false)
                 .customView(R.layout.md_dialog_colorchooser, false)
@@ -334,6 +343,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                         if (isInSub()) {
                             dialog.setActionButton(DialogAction.NEGATIVE, getBuilder().mCancelBtn);
                             isInSub(false);
+                            subIndex(-1); // Do this to avoid ArrayIndexOutOfBoundsException
                             invalidate();
                         } else {
                             dialog.cancel();
@@ -351,28 +361,31 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                     public void onShow(DialogInterface dialog) {
                         invalidateDynamicButtonColors();
                     }
-                })
-                .build();
+                });
 
+        if (builder.mTheme != null)
+            bd.theme(builder.mTheme);
+
+        final MaterialDialog dialog = bd.build();
         final View v = dialog.getCustomView();
-        mGrid = (GridView) v.findViewById(R.id.grid);
+        mGrid = (GridView) v.findViewById(R.id.md_grid);
 
         if (builder.mAllowUserCustom) {
             mSelectedCustomColor = preselectColor;
-            mColorChooserCustomFrame = v.findViewById(R.id.colorChooserCustomFrame);
-            mCustomColorHex = (EditText) v.findViewById(R.id.hexInput);
-            mCustomColorIndicator = v.findViewById(R.id.colorIndicator);
-            mCustomSeekA = (SeekBar) v.findViewById(R.id.colorA);
-            mCustomSeekAValue = (TextView) v.findViewById(R.id.colorAValue);
-            mCustomSeekR = (SeekBar) v.findViewById(R.id.colorR);
-            mCustomSeekRValue = (TextView) v.findViewById(R.id.colorRValue);
-            mCustomSeekG = (SeekBar) v.findViewById(R.id.colorG);
-            mCustomSeekGValue = (TextView) v.findViewById(R.id.colorGValue);
-            mCustomSeekB = (SeekBar) v.findViewById(R.id.colorB);
-            mCustomSeekBValue = (TextView) v.findViewById(R.id.colorBValue);
+            mColorChooserCustomFrame = v.findViewById(R.id.md_colorChooserCustomFrame);
+            mCustomColorHex = (EditText) v.findViewById(R.id.md_hexInput);
+            mCustomColorIndicator = v.findViewById(R.id.md_colorIndicator);
+            mCustomSeekA = (SeekBar) v.findViewById(R.id.md_colorA);
+            mCustomSeekAValue = (TextView) v.findViewById(R.id.md_colorAValue);
+            mCustomSeekR = (SeekBar) v.findViewById(R.id.md_colorR);
+            mCustomSeekRValue = (TextView) v.findViewById(R.id.md_colorRValue);
+            mCustomSeekG = (SeekBar) v.findViewById(R.id.md_colorG);
+            mCustomSeekGValue = (TextView) v.findViewById(R.id.md_colorGValue);
+            mCustomSeekB = (SeekBar) v.findViewById(R.id.md_colorB);
+            mCustomSeekBValue = (TextView) v.findViewById(R.id.md_colorBValue);
 
             if (!builder.mAllowUserCustomAlpha) {
-                v.findViewById(R.id.colorALabel).setVisibility(View.GONE);
+                v.findViewById(R.id.md_colorALabel).setVisibility(View.GONE);
                 mCustomSeekA.setVisibility(View.GONE);
                 mCustomSeekAValue.setVisibility(View.GONE);
                 mCustomColorHex.setHint("2196F3");
@@ -401,6 +414,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
             dialog.setActionButton(DialogAction.NEGATIVE, getBuilder().mCancelBtn);
             mGrid.setVisibility(View.INVISIBLE);
             mColorChooserCustomFrame.setVisibility(View.VISIBLE);
+
             mCustomColorTextWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -439,8 +453,11 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                 public void afterTextChanged(Editable s) {
                 }
             };
+
             mCustomColorHex.addTextChangedListener(mCustomColorTextWatcher);
             mCustomColorRgbListener = new SeekBar.OnSeekBarChangeListener() {
+
+                @SuppressLint("DefaultLocale")
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
@@ -471,6 +488,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                 public void onStopTrackingTouch(SeekBar seekBar) {
                 }
             };
+
             mCustomSeekR.setOnSeekBarChangeListener(mCustomColorRgbListener);
             mCustomSeekG.setOnSeekBarChangeListener(mCustomColorRgbListener);
             mCustomSeekB.setOnSeekBarChangeListener(mCustomColorRgbListener);
@@ -528,6 +546,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
             return position;
         }
 
+        @SuppressLint("DefaultLocale")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -535,6 +554,7 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
                 convertView.setLayoutParams(new GridView.LayoutParams(mCircleSize, mCircleSize));
             }
             CircleView child = (CircleView) convertView;
+            @ColorInt
             final int color = isInSub() ? mColorsSub[topIndex()][position] : mColorsTop[position];
             child.setBackgroundColor(color);
             if (isInSub())
@@ -571,6 +591,10 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         protected int[] mColorsTop;
         @Nullable
         protected int[][] mColorsSub;
+        @Nullable
+        protected String mTag;
+        @Nullable
+        protected Theme mTheme;
 
         protected boolean mAccentMode = false;
         protected boolean mDynamicButtonColor = true;
@@ -586,6 +610,18 @@ public class ColorChooserDialog extends DialogFragment implements View.OnClickLi
         @NonNull
         public Builder titleSub(@StringRes int titleSub) {
             mTitleSub = titleSub;
+            return this;
+        }
+
+        @NonNull
+        public Builder tag(@Nullable String tag) {
+            mTag = tag;
+            return this;
+        }
+
+        @NonNull
+        public Builder theme(@NonNull Theme theme) {
+            mTheme = theme;
             return this;
         }
 

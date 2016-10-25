@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatEditText;
@@ -29,27 +28,25 @@ import java.lang.reflect.Field;
 public class MDTintHelper {
 
     public static void setTint(@NonNull RadioButton radioButton, @ColorInt int color) {
+        final int disabledColor = DialogUtils.getDisabledColor(radioButton.getContext());
         ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{-android.R.attr.state_checked},
-                new int[]{android.R.attr.state_checked}
+                new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{android.R.attr.state_enabled, android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked}
         }, new int[]{
                 DialogUtils.resolveColor(radioButton.getContext(), R.attr.colorControlNormal),
-                color
+                color,
+                disabledColor,
+                disabledColor
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             radioButton.setButtonTintList(sl);
         } else {
-            Drawable radioDrawable = VectorDrawableCompat.create(radioButton.getContext().getResources(),
-                    R.drawable.abc_btn_radio_material, null);
-            if (radioDrawable == null) {
-                // https://github.com/afollestad/material-dialogs/issues/1006
-                // Trying to load this resource as normal drawable
-                radioDrawable = ContextCompat.getDrawable(radioButton.getContext(),
-                        R.drawable.abc_btn_radio_material);
-            }
-            Drawable drawable = DrawableCompat.wrap(radioDrawable);
-            DrawableCompat.setTintList(drawable, sl);
-            radioButton.setButtonDrawable(drawable);
+            Drawable radioDrawable = ContextCompat.getDrawable(radioButton.getContext(), R.drawable.abc_btn_radio_material);
+            Drawable d = DrawableCompat.wrap(radioDrawable);
+            DrawableCompat.setTintList(d, sl);
+            radioButton.setButtonDrawable(d);
         }
     }
 
@@ -128,24 +125,22 @@ public class MDTintHelper {
     }
 
     public static void setTint(@NonNull CheckBox box, @ColorInt int color) {
+        final int disabledColor = DialogUtils.getDisabledColor(box.getContext());
         ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{-android.R.attr.state_checked},
-                new int[]{android.R.attr.state_checked}
+                new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{android.R.attr.state_enabled, android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked}
         }, new int[]{
                 DialogUtils.resolveColor(box.getContext(), R.attr.colorControlNormal),
-                color
+                color,
+                disabledColor,
+                disabledColor
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             box.setButtonTintList(sl);
         } else {
-            Drawable checkDrawable = VectorDrawableCompat.create(box.getContext().getResources(),
-                    R.drawable.abc_btn_check_material, null);
-            if (checkDrawable == null) {
-                // https://github.com/afollestad/material-dialogs/issues/1006
-                // Trying to load this resource as normal drawable
-                checkDrawable = ContextCompat.getDrawable(box.getContext(),
-                        R.drawable.abc_btn_check_material);
-            }
+            Drawable checkDrawable = ContextCompat.getDrawable(box.getContext(), R.drawable.abc_btn_check_material);
             Drawable drawable = DrawableCompat.wrap(checkDrawable);
             DrawableCompat.setTintList(drawable, sl);
             box.setButtonDrawable(drawable);

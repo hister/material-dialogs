@@ -10,8 +10,11 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -34,7 +37,15 @@ public class DialogUtils {
 //        }
 //    }
 
-    public static int adjustAlpha(int color, @SuppressWarnings("SameParameterValue") float factor) {
+    @ColorInt
+    public static int getDisabledColor(Context context) {
+        final int primaryColor = resolveColor(context, android.R.attr.textColorPrimary);
+        final int disabledColor = isColorDark(primaryColor) ? Color.BLACK : Color.WHITE;
+        return adjustAlpha(disabledColor, 0.3f);
+    }
+
+    @ColorInt
+    public static int adjustAlpha(@ColorInt int color, @SuppressWarnings("SameParameterValue") float factor) {
         int alpha = Math.round(Color.alpha(color) * factor);
         int red = Color.red(color);
         int green = Color.green(color);
@@ -42,10 +53,12 @@ public class DialogUtils {
         return Color.argb(alpha, red, green, blue);
     }
 
+    @ColorInt
     public static int resolveColor(Context context, @AttrRes int attr) {
         return resolveColor(context, attr, 0);
     }
 
+    @ColorInt
     public static int resolveColor(Context context, @AttrRes int attr, int fallback) {
         TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
         try {
@@ -107,13 +120,9 @@ public class DialogUtils {
      *                entry. The value 0 is an invalid identifier.
      * @return A single color value in the form 0xAARRGGBB.
      */
+    @ColorInt
     public static int getColor(Context context, @ColorRes int colorId) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            //noinspection deprecation
-            return context.getResources().getColor(colorId);
-        } else {
-            return context.getColor(colorId);
-        }
+        return ContextCompat.getColor(context, colorId);
     }
 
     public static String resolveString(Context context, @AttrRes int attr) {
@@ -191,7 +200,7 @@ public class DialogUtils {
         return resolveBoolean(context, attr, false);
     }
 
-    public static boolean isColorDark(int color) {
+    public static boolean isColorDark(@ColorInt int color) {
         double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return darkness >= 0.5;
     }
@@ -214,7 +223,7 @@ public class DialogUtils {
                 dialog.getInputEditText().requestFocus();
                 InputMethodManager imm = (InputMethodManager) builder.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null)
-                    imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_FORCED);
+                    imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
             }
         });
     }
@@ -255,5 +264,15 @@ public class DialogUtils {
             colors[i] = ta.getColor(i, 0);
         ta.recycle();
         return colors;
+    }
+
+    public static <T> boolean isIn(@NonNull T find, @Nullable T[] ary) {
+        if (ary == null || ary.length == 0)
+            return false;
+        for (T item : ary) {
+            if (item.equals(find))
+                return true;
+        }
+        return false;
     }
 }

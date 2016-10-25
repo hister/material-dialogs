@@ -8,15 +8,16 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.annotation.UiThread;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -53,7 +54,9 @@ class DialogInit {
     public static int getInflateLayout(MaterialDialog.Builder builder) {
         if (builder.customView != null) {
             return R.layout.md_dialog_custom;
-        } else if (builder.items != null && builder.items.length > 0 || builder.adapter != null) {
+        } else if (builder.items != null && builder.items.size() > 0 || builder.adapter != null) {
+            if (builder.checkBoxPrompt != null)
+                return R.layout.md_dialog_list_check;
             return R.layout.md_dialog_list;
         } else if (builder.progress > -2) {
             return R.layout.md_dialog_progress;
@@ -62,7 +65,11 @@ class DialogInit {
                 return R.layout.md_dialog_progress_indeterminate_horizontal;
             return R.layout.md_dialog_progress_indeterminate;
         } else if (builder.inputCallback != null) {
+            if (builder.checkBoxPrompt != null)
+                return R.layout.md_dialog_input_check;
             return R.layout.md_dialog_input;
+        } else if (builder.checkBoxPrompt != null) {
+            return R.layout.md_dialog_basic_check;
         } else {
             return R.layout.md_dialog_basic;
         }
@@ -76,7 +83,8 @@ class DialogInit {
         dialog.setCancelable(builder.cancelable);
         dialog.setCanceledOnTouchOutside(builder.canceledOnTouchOutside);
         if (builder.backgroundColor == 0)
-            builder.backgroundColor = DialogUtils.resolveColor(builder.context, R.attr.md_background_color);
+            builder.backgroundColor = DialogUtils.resolveColor(builder.context, R.attr.md_background_color,
+                    DialogUtils.resolveColor(dialog.getContext(), R.attr.colorBackgroundFloating));
         if (builder.backgroundColor != 0) {
             GradientDrawable drawable = new GradientDrawable();
             drawable.setCornerRadius(builder.context.getResources().getDimension(R.dimen.md_bg_corner_radius));
@@ -98,41 +106,26 @@ class DialogInit {
         if (!builder.titleColorSet) {
             final int titleColorFallback = DialogUtils.resolveColor(dialog.getContext(), android.R.attr.textColorPrimary);
             builder.titleColor = DialogUtils.resolveColor(builder.context, R.attr.md_title_color, titleColorFallback);
-//            if (builder.titleColor == titleColorFallback) {
-//                // Only check for light/dark if color wasn't set to md_title_color
-//                if (DialogUtils.isColorDark(builder.titleColor)) {
-//                    if (builder.theme == Theme.DARK)
-//                        builder.titleColor = DialogUtils.resolveColor(builder.context, android.R.attr.textColorPrimaryInverse);
-//                } else if (builder.theme == Theme.LIGHT)
-//                    builder.titleColor = DialogUtils.resolveColor(builder.context, android.R.attr.textColorPrimaryInverse);
-//            }
         }
         if (!builder.contentColorSet) {
             final int contentColorFallback = DialogUtils.resolveColor(dialog.getContext(), android.R.attr.textColorSecondary);
             builder.contentColor = DialogUtils.resolveColor(builder.context, R.attr.md_content_color, contentColorFallback);
-//            if (builder.contentColor == contentColorFallback) {
-//                // Only check for light/dark if color wasn't set to md_content_color
-//                if (DialogUtils.isColorDark(builder.contentColor)) {
-//                    if (builder.theme == Theme.DARK)
-//                        builder.contentColor = DialogUtils.resolveColor(builder.context, android.R.attr.textColorSecondaryInverse);
-//                } else if (builder.theme == Theme.LIGHT)
-//                    builder.contentColor = DialogUtils.resolveColor(builder.context, android.R.attr.textColorSecondaryInverse);
-//            }
         }
         if (!builder.itemColorSet)
             builder.itemColor = DialogUtils.resolveColor(builder.context, R.attr.md_item_color, builder.contentColor);
 
         // Retrieve references to views
-        dialog.title = (TextView) dialog.view.findViewById(R.id.title);
-        dialog.icon = (ImageView) dialog.view.findViewById(R.id.icon);
-        dialog.titleFrame = dialog.view.findViewById(R.id.titleFrame);
-        dialog.content = (TextView) dialog.view.findViewById(R.id.content);
-        dialog.listView = (ListView) dialog.view.findViewById(R.id.contentListView);
+        dialog.title = (TextView) dialog.view.findViewById(R.id.md_title);
+        dialog.icon = (ImageView) dialog.view.findViewById(R.id.md_icon);
+        dialog.titleFrame = dialog.view.findViewById(R.id.md_titleFrame);
+        dialog.content = (TextView) dialog.view.findViewById(R.id.md_content);
+        dialog.recyclerView = (RecyclerView) dialog.view.findViewById(R.id.md_contentRecyclerView);
+        dialog.checkBoxPrompt = (CheckBox) dialog.view.findViewById(R.id.md_promptCheckbox);
 
         // Button views initially used by checkIfStackingNeeded()
-        dialog.positiveButton = (MDButton) dialog.view.findViewById(R.id.buttonDefaultPositive);
-        dialog.neutralButton = (MDButton) dialog.view.findViewById(R.id.buttonDefaultNeutral);
-        dialog.negativeButton = (MDButton) dialog.view.findViewById(R.id.buttonDefaultNegative);
+        dialog.positiveButton = (MDButton) dialog.view.findViewById(R.id.md_buttonDefaultPositive);
+        dialog.neutralButton = (MDButton) dialog.view.findViewById(R.id.md_buttonDefaultNeutral);
+        dialog.negativeButton = (MDButton) dialog.view.findViewById(R.id.md_buttonDefaultNegative);
 
         // Don't allow the submit button to not be shown for input dialogs
         if (builder.inputCallback != null && builder.positiveText == null)
@@ -218,10 +211,20 @@ class DialogInit {
             }
         }
 
+        // Setup prompt checkbox
+        if (dialog.checkBoxPrompt != null) {
+            dialog.checkBoxPrompt.setText(builder.checkBoxPrompt);
+            dialog.checkBoxPrompt.setChecked(builder.checkBoxPromptInitiallyChecked);
+            dialog.checkBoxPrompt.setOnCheckedChangeListener(builder.checkBoxPromptListener);
+            dialog.setTypeface(dialog.checkBoxPrompt, builder.regularFont);
+            dialog.checkBoxPrompt.setTextColor(builder.contentColor);
+            MDTintHelper.setTint(dialog.checkBoxPrompt, builder.widgetColor);
+        }
+
         // Setup action buttons
         dialog.view.setButtonGravity(builder.buttonsGravity);
         dialog.view.setButtonStackedGravity(builder.btnStackedGravity);
-        dialog.view.setForceStack(builder.forceStacking);
+        dialog.view.setStackingBehavior(builder.stackingBehavior);
         boolean textAllCaps;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             textAllCaps = DialogUtils.resolveBoolean(builder.context, android.R.attr.textAllCaps, true);
@@ -267,11 +270,7 @@ class DialogInit {
         // Setup list dialog stuff
         if (builder.listCallbackMultiChoice != null)
             dialog.selectedIndicesList = new ArrayList<>();
-        if (dialog.listView != null && (builder.items != null && builder.items.length > 0 || builder.adapter != null)) {
-            dialog.listView.setSelector(dialog.getListSelector());
-
-            // No custom adapter specified, setup the list with a MaterialDialogAdapter.
-            // Which supports regular lists and single/multi choice dialogs.
+        if (dialog.recyclerView != null) {
             if (builder.adapter == null) {
                 // Determine list type
                 if (builder.listCallbackSingleChoice != null) {
@@ -285,7 +284,7 @@ class DialogInit {
                 } else {
                     dialog.listType = MaterialDialog.ListType.REGULAR;
                 }
-                builder.adapter = new DefaultAdapter(dialog,
+                builder.adapter = new DefaultRvAdapter(dialog,
                         MaterialDialog.ListType.getLayoutForType(dialog.listType));
             } else if (builder.adapter instanceof MDAdapter) {
                 // Notify simple list adapter of the dialog it belongs to
@@ -301,8 +300,8 @@ class DialogInit {
 
         // Setup custom views
         if (builder.customView != null) {
-            ((MDRootLayout) dialog.view.findViewById(R.id.root)).noTitleNoPadding();
-            FrameLayout frame = (FrameLayout) dialog.view.findViewById(R.id.customViewFrame);
+            ((MDRootLayout) dialog.view.findViewById(R.id.md_root)).noTitleNoPadding();
+            FrameLayout frame = (FrameLayout) dialog.view.findViewById(R.id.md_customViewFrame);
             dialog.customViewFrame = frame;
             View innerView = builder.customView;
             if (innerView.getParent() != null)
@@ -352,6 +351,17 @@ class DialogInit {
         dialog.checkIfListInitScroll();
     }
 
+    private static void fixCanvasScalingWhenHardwareAccelerated(ProgressBar pb) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            // Canvas scaling when hardware accelerated results in artifacts on older API levels, so
+            // we need to use software rendering
+            if (pb.isHardwareAccelerated() && pb.getLayerType() != View.LAYER_TYPE_SOFTWARE) {
+                pb.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
+        }
+    }
+
     private static void setupProgressDialog(final MaterialDialog dialog) {
         final MaterialDialog.Builder builder = dialog.mBuilder;
         if (builder.indeterminateProgress || builder.progress > -2) {
@@ -385,13 +395,13 @@ class DialogInit {
                 dialog.mProgress.setIndeterminate(builder.indeterminateIsHorizontalProgress);
                 dialog.mProgress.setProgress(0);
                 dialog.mProgress.setMax(builder.progressMax);
-                dialog.mProgressLabel = (TextView) dialog.view.findViewById(R.id.label);
+                dialog.mProgressLabel = (TextView) dialog.view.findViewById(R.id.md_label);
                 if (dialog.mProgressLabel != null) {
                     dialog.mProgressLabel.setTextColor(builder.contentColor);
                     dialog.setTypeface(dialog.mProgressLabel, builder.mediumFont);
                     dialog.mProgressLabel.setText(builder.progressPercentFormat.format(0));
                 }
-                dialog.mProgressMinMax = (TextView) dialog.view.findViewById(R.id.minMax);
+                dialog.mProgressMinMax = (TextView) dialog.view.findViewById(R.id.md_minMax);
                 if (dialog.mProgressMinMax != null) {
                     dialog.mProgressMinMax.setTextColor(builder.contentColor);
                     dialog.setTypeface(dialog.mProgressMinMax, builder.regularFont);
@@ -411,6 +421,10 @@ class DialogInit {
                 }
             }
         }
+
+        if (dialog.mProgress != null) {
+            fixCanvasScalingWhenHardwareAccelerated(dialog.mProgress);
+        }
     }
 
     private static void setupInputDialog(final MaterialDialog dialog) {
@@ -429,14 +443,14 @@ class DialogInit {
 
         if (builder.inputType != -1) {
             dialog.input.setInputType(builder.inputType);
-            if (builder.inputType != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD  &&
+            if (builder.inputType != InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD &&
                     (builder.inputType & InputType.TYPE_TEXT_VARIATION_PASSWORD) == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                 // If the flags contain TYPE_TEXT_VARIATION_PASSWORD, apply the password transformation method automatically
                 dialog.input.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         }
 
-        dialog.inputMinMax = (TextView) dialog.view.findViewById(R.id.minMax);
+        dialog.inputMinMax = (TextView) dialog.view.findViewById(R.id.md_minMax);
         if (builder.inputMinLength > 0 || builder.inputMaxLength > -1) {
             dialog.invalidateInputMinMaxIndicator(dialog.input.getText().toString().length(),
                     !builder.inputAllowEmpty);

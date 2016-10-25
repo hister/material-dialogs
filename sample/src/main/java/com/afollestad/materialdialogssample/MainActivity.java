@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.StackingBehavior;
 import com.afollestad.materialdialogs.Theme;
 import com.afollestad.materialdialogs.color.CircleView;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
@@ -53,19 +55,17 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements
         FolderChooserDialog.FolderCallback, FileChooserDialog.FileCallback, ColorChooserDialog.ColorCallback {
 
+    private final static int STORAGE_PERMISSION_RC = 69;
     // custom view dialog
     private EditText passwordInput;
     private View positiveAction;
-
     // color chooser dialog
     private int primaryPreselect;
-    private int accentPreselect;
 
     // UTILITY METHODS
-
+    private int accentPreselect;
     private Toast mToast;
     private Thread mThread;
-    private final static int STORAGE_PERMISSION_RC = 69;
     private Handler mHandler;
 
     private int chooserDialog;
@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         mHandler = null;
     }
 
@@ -149,12 +148,30 @@ public class MainActivity extends AppCompatActivity implements
     @OnClick(R.id.basicIcon)
     public void showBasicIcon() {
         new MaterialDialog.Builder(this)
-                .iconRes(R.drawable.ic_launcher)
+                .iconRes(R.mipmap.ic_launcher)
                 .limitIconToDefaultSize() // limits the displayed icon size to 48dp
                 .title(R.string.useGoogleLocationServices)
                 .content(R.string.useGoogleLocationServicesPrompt)
                 .positiveText(R.string.agree)
                 .negativeText(R.string.disagree)
+                .show();
+    }
+
+    @OnClick(R.id.basicCheckPrompt)
+    public void showBasicCheckPrompt() {
+        new MaterialDialog.Builder(this)
+                .iconRes(R.mipmap.ic_launcher)
+                .limitIconToDefaultSize()
+                .title(Html.fromHtml(getString(R.string.permissionSample, getString(R.string.app_name))))
+                .positiveText(R.string.allow)
+                .negativeText(R.string.deny)
+                .onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        showToast("Prompt checked? " + dialog.isPromptCheckBoxChecked());
+                    }
+                })
+                .checkBoxPromptRes(R.string.dont_ask_again, false, null)
                 .show();
     }
 
@@ -166,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements
                 .positiveText(R.string.speedBoost)
                 .negativeText(R.string.noThanks)
                 .btnStackedGravity(GravityEnum.END)
-                .forceStacking(true)  // this generally should not be forced, but is used for demo purposes
+                .stackingBehavior(StackingBehavior.ALWAYS)  // this generally should not be forced, but is used for demo purposes
                 .show();
     }
 
@@ -251,6 +268,58 @@ public class MainActivity extends AppCompatActivity implements
                         showToast(which + ": " + text);
                     }
                 })
+                .show();
+    }
+
+    @OnClick(R.id.list_checkPrompt)
+    public void showListCheckPrompt() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.socialNetworks)
+                .items(R.array.socialNetworks)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        showToast(which + ": " + text);
+                    }
+                })
+                .checkBoxPromptRes(R.string.example_prompt, true, null)
+                .negativeText(android.R.string.cancel)
+                .show();
+    }
+
+    static int index = 0;
+
+    @SuppressWarnings("ConstantConditions")
+    @OnClick(R.id.list_longPress)
+    public void showListLongPress() {
+        index = 0;
+        new MaterialDialog.Builder(this)
+                .title(R.string.socialNetworks)
+                .items(R.array.socialNetworks)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        showToast(which + ": " + text);
+                    }
+                })
+                .autoDismiss(false)
+                .itemsLongCallback(new MaterialDialog.ListLongCallback() {
+                    @Override
+                    public boolean onLongSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        dialog.getItems().remove(position);
+                        dialog.notifyItemsChanged();
+                        return false;
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        index++;
+                        dialog.getItems().add("Item " + index);
+                        dialog.notifyItemInserted(dialog.getItems().size() - 1);
+                    }
+                })
+                .neutralText(R.string.add_item)
                 .show();
     }
 
@@ -361,9 +430,47 @@ public class MainActivity extends AppCompatActivity implements
                 .show();
     }
 
+    @OnClick(R.id.multiChoice_disabledItems)
+    public void showMultiChoiceDisabledItems() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.socialNetworks)
+                .items(R.array.socialNetworks)
+                .itemsCallbackMultiChoice(new Integer[]{0, 1, 2}, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        StringBuilder str = new StringBuilder();
+                        for (int i = 0; i < which.length; i++) {
+                            if (i > 0) str.append('\n');
+                            str.append(which[i]);
+                            str.append(": ");
+                            str.append(text[i]);
+                        }
+                        showToast(str.toString());
+                        return true; // allow selection
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.clearSelectedIndices();
+                    }
+                })
+                .alwaysCallMultiChoiceCallback()
+                .positiveText(R.string.md_choose_label)
+                .autoDismiss(false)
+                .neutralText(R.string.clear_selection)
+                .itemsDisabledIndices(0, 1)
+                .show();
+    }
+
     @OnClick(R.id.simpleList)
     public void showSimpleList() {
-        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+            @Override
+            public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+                showToast(item.getContent().toString());
+            }
+        });
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content("username@gmail.com")
                 .icon(R.drawable.ic_account_circle)
@@ -382,27 +489,28 @@ public class MainActivity extends AppCompatActivity implements
 
         new MaterialDialog.Builder(this)
                 .title(R.string.set_backup)
-                .adapter(adapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        MaterialSimpleListItem item = adapter.getItem(which);
-                        showToast(item.getContent().toString());
-                    }
-                })
+                .adapter(adapter, null)
                 .show();
     }
 
     @OnClick(R.id.customListItems)
     public void showCustomList() {
+        final ButtonItemAdapter adapter = new ButtonItemAdapter(this, R.array.socialNetworks);
+        adapter.setCallback(new ButtonItemAdapter.Callback() {
+            @Override
+            public void onItemClicked(int index) {
+                showToast("Item clicked: " + index);
+            }
+
+            @Override
+            public void onButtonClicked(int index) {
+                showToast("Button clicked: " + index);
+            }
+        });
+
         new MaterialDialog.Builder(this)
                 .title(R.string.socialNetworks)
-                .adapter(new ButtonItemAdapter(this, R.array.socialNetworks),
-                        new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                showToast("Clicked item " + which);
-                            }
-                        })
+                .adapter(adapter, null)
                 .show();
     }
 
@@ -451,10 +559,10 @@ public class MainActivity extends AppCompatActivity implements
 
         int widgetColor = ThemeSingleton.get().widgetColor;
         MDTintHelper.setTint(checkbox,
-                widgetColor == 0 ? ContextCompat.getColor(this, R.color.material_teal_a400) : widgetColor);
+                widgetColor == 0 ? ContextCompat.getColor(this, R.color.accent) : widgetColor);
 
         MDTintHelper.setTint(passwordInput,
-                widgetColor == 0 ? ContextCompat.getColor(this, R.color.material_teal_a400) : widgetColor);
+                widgetColor == 0 ? ContextCompat.getColor(this, R.color.accent) : widgetColor);
 
         dialog.show();
         positiveAction.setEnabled(false); // disabled by default
@@ -464,9 +572,20 @@ public class MainActivity extends AppCompatActivity implements
     public void showCustomWebView() {
         int accentColor = ThemeSingleton.get().widgetColor;
         if (accentColor == 0)
-            accentColor = ContextCompat.getColor(this, R.color.material_teal_a400);
+            accentColor = ContextCompat.getColor(this, R.color.accent);
         ChangelogDialog.create(false, accentColor)
                 .show(getSupportFragmentManager(), "changelog");
+    }
+
+    @OnClick(R.id.customView_datePicker)
+    public void showCustomDatePicker() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.date_picker)
+                .customView(R.layout.dialog_datepicker, false)
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+//                .stackingBehavior(StackingBehavior.ALWAYS)
+                .show();
     }
 
     @OnClick(R.id.colorChooser_primary)
@@ -546,7 +665,7 @@ public class MainActivity extends AppCompatActivity implements
                 .titleColorRes(R.color.material_red_400)
                 .contentColorRes(android.R.color.white)
                 .backgroundColorRes(R.color.material_blue_grey_800)
-                .dividerColorRes(R.color.material_teal_a400)
+                .dividerColorRes(R.color.accent)
                 .btnSelector(R.drawable.md_btn_selector_custom, DialogAction.POSITIVE)
                 .positiveColor(Color.WHITE)
                 .negativeColorAttr(android.R.attr.textColorSecondaryInverse)
@@ -605,13 +724,14 @@ public class MainActivity extends AppCompatActivity implements
     @OnClick(R.id.folder_chooser)
     public void showFolderChooser() {
         chooserDialog = R.id.folder_chooser;
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_RC);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_RC);
             return;
         }
         new FolderChooserDialog.Builder(MainActivity.this)
                 .chooseButton(R.string.md_choose_label)
+                .allowNewFolder(true, 0)
                 .show();
     }
 
@@ -660,6 +780,26 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     }
                 }).show();
+    }
+
+    @OnClick(R.id.input_checkPrompt)
+    public void showInputDialogCheckPrompt() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.input)
+                .content(R.string.input_content)
+                .inputType(InputType.TYPE_CLASS_TEXT |
+                        InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
+                        InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .inputRange(2, 16)
+                .positiveText(R.string.submit)
+                .input(R.string.input_hint, R.string.input_hint, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        showToast("Hello, " + input.toString() + "!");
+                    }
+                })
+                .checkBoxPromptRes(R.string.example_prompt, true, null)
+                .show();
     }
 
     @OnClick(R.id.progress1)

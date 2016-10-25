@@ -10,7 +10,7 @@
     <include layout="@layout/md_stub_titleframe"/>
 
     <ScrollView
-        android:id="@+id/contentScrollView"
+        android:id="@+id/md_contentScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <ir.tgbs.rtlizer.RtlTextView
-                android:id="@+id/content"
+                android:id="@+id/md_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"

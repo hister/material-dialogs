@@ -2,15 +2,14 @@
        xmlns:app="http://schemas.android.com/apk/res-auto"
        xmlns:tools="http://schemas.android.com/tools">
 
-
     <com.afollestad.materialdialogs.internal.MDButton
-        android:id="@+id/buttonDefaultNeutral"
+        android:id="@+id/md_buttonDefaultNeutral"
         style="@style/MD_ActionButton.Text"
         app:fontType="boldUi"
         tools:text="Neutral"/>
 
     <com.afollestad.materialdialogs.internal.MDButton
-        android:id="@+id/buttonDefaultNegative"
+        android:id="@+id/md_buttonDefaultNegative"
         style="@style/MD_ActionButton.Text"
         app:fontType="boldUi"
         tools:layout_alignParentLeft="true"
@@ -18,7 +17,7 @@
         tools:text="Negative"/>
 
     <com.afollestad.materialdialogs.internal.MDButton
-        android:id="@+id/buttonDefaultPositive"
+        android:id="@+id/md_buttonDefaultPositive"
         style="@style/MD_ActionButton.Text"
         app:fontType="boldUi"
         tools:layout_alignParentLeft="true"

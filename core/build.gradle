@@ -1,20 +1,24 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'ir.tgbs.gradle.publish'
 
-group='com.afollestad'
-
-def libVersion = '0.8.5.7.1'
+ext {
+    PUBLISH_GROUP_ID = 'com.afollestad.material-dialogs'
+    PUBLISH_ARTIFACT_ID = 'core'
+    PUBLISH_VERSION = '0.9.0.2'
+    SUPPORT_LIBRARY_VERSION = '24.2.1'
+    BUILD_TOOLS = "24.0.3"
+    TARGET_SDK = 24
+}
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion TARGET_SDK
+    buildToolsVersion BUILD_TOOLS
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 23
+        minSdkVersion 9
+        targetSdkVersion TARGET_SDK
         versionCode 1
-        versionName "0.8.5.7"
+        versionName PUBLISH_VERSION
         consumerProguardFiles 'progress-proguard.txt'
     }
     lintOptions {
@@ -24,13 +28,15 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'com.android.support:support-annotations:23.2.1'
-    compile 'me.zhanghai.android.materialprogressbar:library:1.1.5'
+    compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+    compile "me.zhanghai.android.materialprogressbar:library:1.1.7"
     compile 'ir.tgbs:rtlizer:1.1.1'
 }
+
+apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'
 
 uploadArchives {
     repositories {

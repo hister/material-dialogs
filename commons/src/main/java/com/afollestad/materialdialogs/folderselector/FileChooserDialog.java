@@ -45,16 +45,20 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
     public FileChooserDialog() {
     }
 
-    String[] getContentsArray() {
-        if (parentContents == null) return new String[]{};
+    CharSequence[] getContentsArray() {
+        if (parentContents == null) {
+            if (canGoUp)
+                return new String[]{getBuilder().mGoUpLabel};
+            return new String[]{};
+        }
         String[] results = new String[parentContents.length + (canGoUp ? 1 : 0)];
-        if (canGoUp) results[0] = "...";
+        if (canGoUp) results[0] = getBuilder().mGoUpLabel;
         for (int i = 0; i < parentContents.length; i++)
             results[canGoUp ? i + 1 : i] = parentContents[i].getName();
         return results;
     }
 
-    File[] listFiles(String mimeType) {
+    File[] listFiles(@Nullable String mimeType, @Nullable String[] extensions) {
         File[] contents = parentFolder.listFiles();
         List<File> results = new ArrayList<>();
         if (contents != null) {
@@ -63,8 +67,19 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
                 if (fi.isDirectory()) {
                     results.add(fi);
                 } else {
-                    if (fileIsMimeType(fi, mimeType, mimeTypeMap)) {
-                        results.add(fi);
+                    if (extensions != null) {
+                        boolean found = false;
+                        for (String ext : extensions) {
+                            if (fi.getName().toLowerCase().contains(ext.toLowerCase())) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) results.add(fi);
+                    } else if (mimeType != null) {
+                        if (fileIsMimeType(fi, mimeType, mimeTypeMap)) {
+                            results.add(fi);
+                        }
                     }
                 }
             }
@@ -85,6 +100,8 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
                 return false;
             }
             String fileExtension = filename.substring(dotPos + 1);
+            if (fileExtension.endsWith("json"))
+                return mimeType.startsWith("application/json");
             String fileType = mimeTypeMap.getMimeTypeFromExtension(fileExtension);
             if (fileType == null) {
                 return false;
@@ -134,7 +151,7 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
         if (!getArguments().containsKey("current_path"))
             getArguments().putString("current_path", getBuilder().mInitialPath);
         parentFolder = new File(getArguments().getString("current_path"));
-        parentContents = listFiles(getBuilder().mMimeType);
+        parentContents = listFiles(getBuilder().mMimeType, getBuilder().mExtensions);
         return new MaterialDialog.Builder(getActivity())
                 .title(parentFolder.getAbsolutePath())
                 .items(getContentsArray())
@@ -147,7 +164,6 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
                 })
                 .autoDismiss(false)
                 .negativeText(getBuilder().mCancelButton)
-                .positiveText(getBuilder().mChooseButton)
                 .build();
     }
 
@@ -168,7 +184,7 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
             mCallback.onFileSelection(this, parentFolder);
             dismiss();
         } else {
-            parentContents = listFiles(getBuilder().mMimeType);
+            parentContents = listFiles(getBuilder().mMimeType, getBuilder().mExtensions);
             MaterialDialog dialog = (MaterialDialog) getDialog();
             dialog.setTitle(parentFolder.getAbsolutePath());
             getArguments().putString("current_path", parentFolder.getAbsolutePath());
@@ -198,30 +214,24 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
         @NonNull
         protected final transient AppCompatActivity mContext;
         @StringRes
-        protected int mChooseButton;
-        @StringRes
         protected int mCancelButton;
         protected String mInitialPath;
         protected String mMimeType;
+        protected String[] mExtensions;
         protected String mTag;
+        protected String mGoUpLabel;
 
         public <ActivityType extends AppCompatActivity & FileCallback> Builder(@NonNull ActivityType context) {
             mContext = context;
             mCancelButton = android.R.string.cancel;
-            mChooseButton = R.string.md_choose_label;
             mInitialPath = Environment.getExternalStorageDirectory().getAbsolutePath();
             mMimeType = null;
+            mGoUpLabel = "...";
         }
 
         @NonNull
         public Builder cancelButton(@StringRes int text) {
             mCancelButton = text;
-            return this;
-        }
-
-        @NonNull
-        public Builder chooseButton(@StringRes int text) {
-            mChooseButton = text;
             return this;
         }
 
@@ -240,10 +250,22 @@ public class FileChooserDialog extends DialogFragment implements MaterialDialog.
         }
 
         @NonNull
+        public Builder extensionsFilter(@Nullable String... extensions) {
+            mExtensions = extensions;
+            return this;
+        }
+
+        @NonNull
         public Builder tag(@Nullable String tag) {
             if (tag == null)
                 tag = DEFAULT_TAG;
             mTag = tag;
+            return this;
+        }
+
+        @NonNull
+        public Builder goUpLabel(String text) {
+            mGoUpLabel = text;
             return this;
         }
 

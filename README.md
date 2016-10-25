@@ -1,10 +1,11 @@
 # Material Dialogs
 
-[![Release](https://jitpack.io/v/afollestad/material-dialogs.svg)](https://jitpack.io/#afollestad/material-dialogs)
+[ ![Core](https://api.bintray.com/packages/drummer-aidan/maven/material-dialogs%3Acore/images/download.svg) ](https://bintray.com/drummer-aidan/maven/material-dialogs%3Acore/_latestVersion)
+[ ![Commons](https://api.bintray.com/packages/drummer-aidan/maven/material-dialogs%3Acommons/images/download.svg) ](https://bintray.com/drummer-aidan/maven/material-dialogs%3Acommons/_latestVersion)
 [![Build Status](https://travis-ci.org/afollestad/material-dialogs.svg)](https://travis-ci.org/afollestad/material-dialogs)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/afollestad/material-dialogs/blob/master/LICENSE.txt)
 
-![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/mddemoshowcase.png)
+![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/readmeshowcase.png)
 
 # Table of Contents (Core)
 
@@ -16,43 +17,44 @@
 3. [What's New](https://github.com/afollestad/material-dialogs#whats-new)
 4. [Basic Dialog](https://github.com/afollestad/material-dialogs#basic-dialog)
 5. [Dismissing Dialogs](https://github.com/afollestad/material-dialogs#dismissing-dialogs)
-5. [Migration from AlertDialogs](https://github.com/afollestad/material-dialogs#migration-from-alertdialogs)
 6. [Displaying an Icon](https://github.com/afollestad/material-dialogs#displaying-an-icon)
 7. [Stacked Action Buttons](https://github.com/afollestad/material-dialogs#stacked-action-buttons)
+    1. [Stacking Behavior](https://github.com/afollestad/material-dialogs#stacking-behavior)
 8. [Neutral Action Button](https://github.com/afollestad/material-dialogs#neutral-action-button)
 9. [Callbacks](https://github.com/afollestad/material-dialogs#callbacks)
-10. [List Dialogs](https://github.com/afollestad/material-dialogs#list-dialogs)
-11. [Single Choice List Dialogs](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs)
+10. [CheckBox Prompts](https://github.com/afollestad/material-dialogs#checkbox-prompts)
+11. [List Dialogs](https://github.com/afollestad/material-dialogs#list-dialogs)
+12. [Single Choice List Dialogs](https://github.com/afollestad/material-dialogs#single-choice-list-dialogs)
     1. [Coloring Radio Buttons](https://github.com/afollestad/material-dialogs#coloring-radio-buttons)
-12. [Multi Choice List Dialogs](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs)
+13. [Multi Choice List Dialogs](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs)
     1. [Coloring Check Boxes](https://github.com/afollestad/material-dialogs#coloring-check-boxes)
-13. [Assigning IDs to List Item Views](https://github.com/afollestad/material-dialogs#assigning-ids-to-list-item-views)
-13. [Custom List Dialogs](https://github.com/afollestad/material-dialogs#custom-list-dialogs)
-14. [Custom Views](https://github.com/afollestad/material-dialogs#custom-views)
+14. [Assigning IDs to List Item Views](https://github.com/afollestad/material-dialogs#assigning-ids-to-list-item-views)
+15. [Custom List Dialogs](https://github.com/afollestad/material-dialogs#custom-list-dialogs)
+16. [Custom Views](https://github.com/afollestad/material-dialogs#custom-views)
     1. [Later Access](https://github.com/afollestad/material-dialogs#later-access)
-15. [Typefaces](https://github.com/afollestad/material-dialogs#typefaces)
-16. [Getting and Setting Action Buttons](https://github.com/afollestad/material-dialogs#getting-and-setting-action-buttons)
-17. [Theming](https://github.com/afollestad/material-dialogs#theming)
+17. [Typefaces](https://github.com/afollestad/material-dialogs#typefaces)
+18. [Getting and Setting Action Buttons](https://github.com/afollestad/material-dialogs#getting-and-setting-action-buttons)
+19. [Theming](https://github.com/afollestad/material-dialogs#theming)
     1. [Basics](https://github.com/afollestad/material-dialogs#basics)
     2. [Colors](https://github.com/afollestad/material-dialogs#colors)
     3. [Selectors](https://github.com/afollestad/material-dialogs#selectors)
     4. [Gravity](https://github.com/afollestad/material-dialogs#gravity)
     5. [Material Palette](https://github.com/afollestad/material-dialogs#material-palette)
-18. [Global Theming](https://github.com/afollestad/material-dialogs#global-theming)
-19. [Show, Cancel, and Dismiss Callbacks](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks)
-20. [Input Dialogs](https://github.com/afollestad/material-dialogs#input-dialogs)
+20. [Global Theming](https://github.com/afollestad/material-dialogs#global-theming)
+21. [Show, Cancel, and Dismiss Callbacks](https://github.com/afollestad/material-dialogs#show-cancel-and-dismiss-callbacks)
+22. [Input Dialogs](https://github.com/afollestad/material-dialogs#input-dialogs)
     1. [Coloring the EditText](https://github.com/afollestad/material-dialogs#coloring-the-edittext)
     2. [Limiting Input Length](https://github.com/afollestad/material-dialogs#limiting-input-length)
     3. [Custom Invalidation](https://github.com/afollestad/material-dialogs#custom-invalidation)
-21. [Progress Dialogs](https://github.com/afollestad/material-dialogs#progress-dialogs)
+23. [Progress Dialogs](https://github.com/afollestad/material-dialogs#progress-dialogs)
     1. [Proguard](https://github.com/afollestad/material-dialogs#proguard)
     2. [Indeterminate Progress Dialogs](https://github.com/afollestad/material-dialogs#indeterminate-progress-dialogs)
     3. [Determinate (Seek Bar) Progress Dialogs](https://github.com/afollestad/material-dialogs#determinate-seek-bar-progress-dialogs)
     4. [Make an Indeterminate Dialog Horizontal](https://github.com/afollestad/material-dialogs#make-an-indeterminate-dialog-horizontal)
     5. [Coloring the Progress Bar](https://github.com/afollestad/material-dialogs#coloring-the-progress-bar)
     6. [Custom Number and Progress Formats](https://github.com/afollestad/material-dialogs#custom-number-and-progress-formats)
-22. [Tint Helper](https://github.com/afollestad/material-dialogs#tint-helper)
-23. [Misc](https://github.com/afollestad/material-dialogs#misc)
+24. [Tint Helper](https://github.com/afollestad/material-dialogs#tint-helper)
+25. [Misc](https://github.com/afollestad/material-dialogs#misc)
 
 # Table of Contents (Commons)
 
@@ -86,30 +88,18 @@ repository will allow GitHub to email you whenever I publish a release.
 
 ### Repository
 
-Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
-
-```gradle
-allprojects {
-	repositories {
-		...
-		maven { url "https://jitpack.io" }
-	}
-}
-```
+The Gradle dependency is available via [jCenter](https://bintray.com/drummer-aidan/maven/material-dialogs/view).
+jCenter is the default Maven repository used by Android Studio.
 
 ### Core
 
-The *core* module contains all the major classes of this library, including `MaterialDialog` and `AlertDialogWrapper`.
+The *core* module contains all the major classes of this library, including `MaterialDialog`.
 You can create basic, list, single/multi choice, progress, input, etc. dialogs with core.
 
 ```gradle
 dependencies {
-
 	// ... other dependencies here
-
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:core:0.9.0.2'
 }
 ```
 
@@ -120,12 +110,8 @@ The *commons* module contains extensions to the library that not everyone may ne
 
 ```gradle
 dependencies {
-
     // ... other dependencies here
-    
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.7@aar') {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:commons:0.9.0.2'
 }
 ```
 
@@ -145,9 +131,7 @@ If you Watch this repository, GitHub will send you an email every time I publish
 
 # Basic Dialog
 
-First of all, note that `MaterialDialog` extends `DialogBase`, which extends `AlertDialog`. While
-a very small number of the stock methods are purposely deprecated and don't work, you have access
-to methods such as `dismiss()`, `setTitle()`, `setIcon()`, `setCancelable()`, etc. Alternatives are discussed below.
+First of all, note that `MaterialDialog` extends `DialogBase`, which extends `android.app.Dialog`.
 
 Here's a basic example that mimics the dialog you see on Google's Material design guidelines
 (here: http://www.google.com/design/spec/components/dialogs.html#dialogs-usage). Note that you can
@@ -163,8 +147,9 @@ new MaterialDialog.Builder(this)
         .show();
 ```
 
-On Lollipop (API 21+) or if you use AppCompat, the Material dialog will automatically match the `positiveColor`
-(which is used on the positive action button) to the `colorAccent` attribute of your styles.xml theme.
+**Your Activities need to inherit the AppCompat themes in order to work correctly with this library.**
+The Material dialog will automatically match the `positiveColor` (which is used on the positive action
+button) to the `colorAccent` attribute of your styles.xml theme.
 
 If the content is long enough, it will become scrollable and a divider will be displayed above the action buttons.
 
@@ -213,26 +198,6 @@ There are other various places where the `MaterialDialog` instance is given, suc
 
 ---
 
-# Migration from AlertDialogs
-
-If you're migrating old dialogs you could use ```AlertDialogWrapper```. You need change imports and replace ```AlertDialog.Builder``` with ```AlertDialogWrapper.Builder```:
-
-```java
-new AlertDialogWrapper.Builder(this)
-        .setTitle(R.string.title)
-        .setMessage(R.string.message)
-        .setNegativeButton(R.string.OK, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).show();
-```
-
-But it's highly recommended to use original ```MaterialDialog``` API for new usages.
-
----
-
 # Displaying an Icon
 
 MaterialDialog supports the display of an icon just like the stock AlertDialog; it will go to the left of the title.
@@ -265,7 +230,16 @@ new MaterialDialog.Builder(this)
         .show();
 ```
 
-You can also force the dialog to stack its buttons with the `forceStacking()` method of the `Builder`.
+### Stacking Behavior
+
+You can set stacking behavior from the `Builder`:
+
+```java
+new MaterialDialog.Builder(this)
+    ...
+    .stackingBehavior(StackingBehavior.ADAPTIVE)  // the default value
+    .show();
+```
 
 ---
 
@@ -325,6 +299,31 @@ If you are listening for all three action buttons, you could just use `onAny()`.
  parameter will tell you which button was pressed.
 
 If `autoDismiss` is turned off, then you must manually dismiss the dialog in these callbacks. Auto dismiss is on by default.
+
+---
+
+# CheckBox Prompts
+
+Checkbox prompts allow you to display a UI similar to what Android uses to ask for a permission on API 23+.
+
+**Note:** you can use checkbox prompts with list dialogs and input dialogs, too.
+
+```java
+new MaterialDialog.Builder(this)
+    .iconRes(R.drawable.ic_launcher)
+    .limitIconToDefaultSize()
+    .title(R.string.example_title)
+    .positiveText(R.string.allow)
+    .negativeText(R.string.deny)
+    .onAny(new MaterialDialog.SingleButtonCallback() {
+        @Override
+        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            showToast("Prompt checked? " + dialog.isPromptCheckBoxChecked());
+        }
+    })
+    .checkBoxPromptRes(R.string.dont_ask_again, false, null)
+    .show();
+```
 
 ---
 
@@ -476,30 +475,29 @@ exactly how you want your list to work.
 ```java
 new MaterialDialog.Builder(this)
         .title(R.string.socialNetworks)
-        .adapter(new ButtonItemAdapter(this, R.array.socialNetworks),
-                new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        Toast.makeText(MainActivity.this, "Clicked item " + which, Toast.LENGTH_SHORT).show();
-                    }
-                })
+         // second parameter is an optional layout manager. Must be a LinearLayoutManager or GridLayoutManager.
+        .adapter(new ButtonItemAdapter(this, R.array.socialNetworks), null)
         .show();
 ```
 
-If you need access to the `ListView`, you can use the `MaterialDialog` instance:
+**Note** that with newer releases, Material Dialogs no longer supports `ListView` and `ListAdapter`.
+It's about time that everyone uses `RecyclerView`. **Your custom adapters will have to handle item click
+events on their own; this library's classes and sample project have some good examples of how that is done correctly.**
+
+If you need access to the `RecyclerView`, you can use the `MaterialDialog` instance:
 
 ```java
 MaterialDialog dialog = new MaterialDialog.Builder(this)
         ...
         .build();
 
-ListView list = dialog.getListView();
+RecyclerView list = dialog.getRecyclerView();
 // Do something with it
 
 dialog.show();
 ```
 
-Note that you don't need to be using a custom adapter in order to access the `ListView`, it's there for single/multi choice dialogs, regular list dialogs, etc.
+Note that you don't need to be using a custom adapter in order to access the `RecyclerView`, it's there for single/multi choice dialogs, regular list dialogs, etc.
 
 ---
 
@@ -1220,10 +1218,11 @@ The Builder is used like this:
 ```java
 // Pass AppCompatActivity which implements FileCallback
 new FileChooserDialog.Builder(this)
-    .chooseButton(R.string.md_choose_label)  // changes label of the choose button
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .mimeType("image/*") // Optional MIME type filter
+    .extensionsFilter(".png", ".jpg") // Optional extension filter, will override mimeType()
     .tag("optional-identifier")
+    .goUpLabel("Up") // custom go up label, default label is "..."
     .show();
 ```
 
@@ -1254,6 +1253,7 @@ new FolderChooserDialog.Builder(this)
     .chooseButton(R.string.md_choose_label)  // changes label of the choose button
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .tag("optional-identifier")
+    .goUpLabel("Up") // custom go up label, default label is "..."
     .show();
 ```
 
@@ -1274,6 +1274,19 @@ public class MyActivity implements FolderChooserDialog.FolderCallback {
 
 ---
 
+Optionally, you can allow users to have the ability to create new folders from this dialog:
+
+```java
+new FolderChooserDialog.Builder(this)
+    .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+    .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
+    .tag("optional-identifier")
+    .allowNewFolder(true, R.string.new_folder)  // pass 0 in the second parameter to use default button label
+    .show();
+```
+
+---
+
 # Simple List Dialogs
 
 Simple List Dialogs are a specific style of list dialogs taken from the Material Design Guidelines: https://www.google.com/design/spec/components/dialogs.html#dialogs-simple-dialogs
@@ -1281,7 +1294,13 @@ Simple List Dialogs are a specific style of list dialogs taken from the Material
 This library's implementation is just a pre-made adapter that you can pass to the `MaterialDialog.Builder`.
 
 ```java
-final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
+final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
+    @Override
+    public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
+        // TODO
+    }
+});
+
 adapter.add(new MaterialSimpleListItem.Builder(this)
     .content("username@gmail.com")
     .icon(R.drawable.ic_account_circle)
@@ -1300,13 +1319,7 @@ adapter.add(new MaterialSimpleListItem.Builder(this)
 
 new MaterialDialog.Builder(this)
     .title(R.string.set_backup)
-    .adapter(adapter, new MaterialDialog.ListCallback() {
-        @Override
-        public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-            MaterialSimpleListItem item = adapter.getItem(which);
-            // TODO
-        }
-    })
+    .adapter(adapter, null)
     .show();
 ```
 

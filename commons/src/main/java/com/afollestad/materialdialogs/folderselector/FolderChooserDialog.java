@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,7 +49,11 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
     }
 
     String[] getContentsArray() {
-        if (parentContents == null) return new String[]{};
+        if (parentContents == null) {
+            if (canGoUp)
+                return new String[]{getBuilder().mGoUpLabel};
+            return new String[]{};
+        }
         String[] results = new String[parentContents.length + (canGoUp ? 1 : 0)];
         if (canGoUp) results[0] = "...";
         for (int i = 0; i < parentContents.length; i++)
@@ -89,7 +94,7 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
             getArguments().putString("current_path", getBuilder().mInitialPath);
         parentFolder = new File(getArguments().getString("current_path"));
         parentContents = listFiles();
-        return new MaterialDialog.Builder(getActivity())
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                 .title(parentFolder.getAbsolutePath())
                 .items(getContentsArray())
                 .itemsCallback(this)
@@ -108,8 +113,32 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
                 })
                 .autoDismiss(false)
                 .positiveText(getBuilder().mChooseButton)
-                .negativeText(getBuilder().mCancelButton)
-                .build();
+                .negativeText(getBuilder().mCancelButton);
+        if (getBuilder().mAllowNewFolder) {
+            builder.neutralText(getBuilder().mNewFolderButton);
+            builder.onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    createNewFolder();
+                }
+            });
+        }
+        return builder.build();
+    }
+
+    private void createNewFolder() {
+        new MaterialDialog.Builder(getActivity())
+                .title(getBuilder().mNewFolderButton)
+                .input(0, 0, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        //noinspection ResultOfMethodCallIgnored
+                        final File newFi = new File(parentFolder, input.toString());
+                        if (!newFi.mkdir())
+                            Toast.makeText(getActivity(), "Unable to create folder " + newFi.getAbsolutePath() + ", make sure you have the WRITE_EXTERNAL_STORAGE permission.", Toast.LENGTH_SHORT).show();
+                        else reload();
+                    }
+                }).show();
     }
 
     @Override
@@ -125,6 +154,10 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
             if (parentFolder.getAbsolutePath().equals("/storage/emulated"))
                 parentFolder = Environment.getExternalStorageDirectory();
         }
+        reload();
+    }
+
+    private void reload() {
         parentContents = listFiles();
         MaterialDialog dialog = (MaterialDialog) getDialog();
         dialog.setTitle(parentFolder.getAbsolutePath());
@@ -159,11 +192,16 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
         protected int mCancelButton;
         protected String mInitialPath;
         protected String mTag;
+        protected boolean mAllowNewFolder;
+        @StringRes
+        protected int mNewFolderButton;
+        protected String mGoUpLabel;
 
         public <ActivityType extends AppCompatActivity & FolderCallback> Builder(@NonNull ActivityType context) {
             mContext = context;
             mChooseButton = R.string.md_choose_label;
             mCancelButton = android.R.string.cancel;
+            mGoUpLabel = "...";
             mInitialPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         }
 
@@ -176,6 +214,21 @@ public class FolderChooserDialog extends DialogFragment implements MaterialDialo
         @NonNull
         public Builder cancelButton(@StringRes int text) {
             mCancelButton = text;
+            return this;
+        }
+        
+        @NonNull
+        public Builder goUpLabel(String text) {
+            mGoUpLabel = text;
+            return this;
+        }
+
+        @NonNull
+        public Builder allowNewFolder(boolean allow, @StringRes int buttonLabel) {
+            mAllowNewFolder = allow;
+            if (buttonLabel == 0)
+                buttonLabel = R.string.new_folder;
+            mNewFolderButton = buttonLabel;
             return this;
         }
 
