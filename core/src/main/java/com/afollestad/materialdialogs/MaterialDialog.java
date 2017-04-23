@@ -48,6 +48,7 @@ import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.afollestad.materialdialogs.util.DialogUtils;
 import com.afollestad.materialdialogs.util.RippleHelper;
 import com.afollestad.materialdialogs.util.TypefaceHelper;
+import com.tgbsco.nargeel.rtlizer.util.RtlFont;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -572,6 +573,8 @@ public class MaterialDialog extends DialogBase implements
                 } catch (Exception ignored) {
                 }
             }
+
+            typeface(RtlFont.getTypeFace(getContext(), RtlFont.FontType.BOLD_UI), RtlFont.getTypeFace(getContext(), RtlFont.FontType.REGULAR));
         }
 
         private void checkSingleton() {

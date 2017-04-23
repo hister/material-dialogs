@@ -2,7 +2,6 @@ package com.afollestad.materialdialogs.internal;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -25,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.R;
 import com.afollestad.materialdialogs.StackingBehavior;
 import com.afollestad.materialdialogs.util.DialogUtils;
+import com.tgbsco.nargeel.rtlizer.Rtlizer;
 
 /**
  * @author Kevin Barry (teslacoil) 4/02/2015
@@ -363,9 +363,7 @@ public class MDRootLayout extends ViewGroup {
     }
 
     private void invertGravityIfNecessary() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) return;
-        Configuration config = getResources().getConfiguration();
-        if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+        if (Rtlizer.isRtl()) {
             switch (mButtonGravity) {
                 case START:
                     mButtonGravity = GravityEnum.END;

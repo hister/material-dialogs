@@ -1,8 +1,8 @@
-<ir.tgbs.rtlizer.RtlLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.tgbsco.nargeel.rtlizer.RtlRelativeLayout
     android:id="@+id/md_titleFrame"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="start|center_vertical"
@@ -16,19 +16,20 @@
         android:id="@+id/md_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/md_icon_margin"
-        android:layout_marginRight="@dimen/md_icon_margin"
         android:scaleType="fitXY"
-        tools:ignore="ContentDescription" />
+        app:alignParentStart="true"
+        app:marginEnd="@dimen/md_icon_margin"
+        tools:ignore="ContentDescription"/>
 
-    <ir.tgbs.rtlizer.RtlTextView
+    <com.tgbsco.nargeel.rtlizer.RtlTextView
         android:id="@+id/md_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:gravity="start"
-        app:fontType="boldUi"
         android:textSize="@dimen/md_title_textsize"
-        tools:text="Title" />
+        app:fontType="boldUi"
+        app:toEndOf="@id/md_icon"
+        tools:text="Title"/>
 
-</ir.tgbs.rtlizer.RtlLinearLayout>
+</com.tgbsco.nargeel.rtlizer.RtlRelativeLayout>

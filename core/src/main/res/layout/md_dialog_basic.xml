@@ -17,11 +17,11 @@
         android:paddingBottom="@dimen/md_content_padding_bottom"
         android:paddingTop="@dimen/md_content_padding_top">
 
-        <ir.tgbs.rtlizer.RtlLinearLayout
+        <com.tgbsco.nargeel.rtlizer.RtlLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ir.tgbs.rtlizer.RtlTextView
+            <com.tgbsco.nargeel.rtlizer.RtlTextView
                 android:id="@+id/md_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                 android:paddingRight="@dimen/md_dialog_frame_margin"
                 android:textSize="@dimen/md_content_textsize"
                 tools:text="Content"/>
-        </ir.tgbs.rtlizer.RtlLinearLayout>
+        </com.tgbsco.nargeel.rtlizer.RtlLinearLayout>
 
     </ScrollView>
 

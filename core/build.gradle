@@ -5,9 +5,9 @@ ext {
     PUBLISH_GROUP_ID = 'com.afollestad.material-dialogs'
     PUBLISH_ARTIFACT_ID = 'core'
     PUBLISH_VERSION = '0.9.0.2'
-    SUPPORT_LIBRARY_VERSION = '24.2.1'
-    BUILD_TOOLS = "24.0.3"
-    TARGET_SDK = 24
+    SUPPORT_LIBRARY_VERSION = '25.1.0'
+    BUILD_TOOLS = "25.0.2"
+    TARGET_SDK = 25
 }
 
 android {
@@ -33,19 +33,20 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
     compile "me.zhanghai.android.materialprogressbar:library:1.1.7"
-    compile 'ir.tgbs:rtlizer:1.1.1'
+    compile 'com.tgbsco.nargeel:rtlizer:1.1.0'
 }
 
-apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'
+//apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'
 
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "file:\\\\hana\\Android\\maven")
+            repository(url: "http://artifactory.ba/artifactory/repo") {
+                authentication(userName: repoUser, password: repoPass)
+            }
             pom.groupId = 'com.afollestad'
             pom.artifactId = 'material-dialogs'
-            pom.version = libVersion
+            pom.version = '0.9.0.2.1'
         }
     }
-    return 0
 }

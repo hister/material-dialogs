@@ -4,8 +4,8 @@ ext {
     PUBLISH_GROUP_ID = 'com.afollestad.material-dialogs'
     PUBLISH_ARTIFACT_ID = 'commons'
     PUBLISH_VERSION = '0.9.0.2'
-    SUPPORT_LIBRARY_VERSION = '24.2.1'
-    BUILD_TOOLS = "24.0.3"
+    SUPPORT_LIBRARY_VERSION = '25.+'
+    BUILD_TOOLS = "25.0.2"
     TARGET_SDK = 24
 }
 
@@ -30,4 +30,4 @@ dependencies {
     compile project(':core')
 }
 
-apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'
+//apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'

@@ -1,17 +1,23 @@
 buildscript {
     repositories {
         jcenter()
-        mavenLocal()
+        maven { url "//hana/Android/maven" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
-        classpath 'ir.tgbs.gradle:publish:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'ir.tgbs.gradle:publish:1.0.1'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
-        mavenLocal()
+        maven {
+            url "http://artifactory.ba/artifactory/repo"
+            credentials {
+                username repoUser
+                password repoPass
+            }
+        }
     }
 }

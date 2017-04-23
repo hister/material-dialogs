@@ -12,7 +12,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.R;
 import com.afollestad.materialdialogs.util.DialogUtils;
 
-import ir.tgbs.rtlizer.RtlTextView;
+import com.tgbsco.nargeel.rtlizer.RtlTextView;
 
 /**
  * @author Kevin Barry (teslacoil) 4/02/2015
